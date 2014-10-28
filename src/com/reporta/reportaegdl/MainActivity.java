@@ -13,7 +13,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nuevo_layout);
+        setContentView(R.layout.activity_main);
     }
 
 
@@ -24,8 +24,27 @@ public class MainActivity extends Activity {
         return true;
     }
     
+    // Intent para la clase de Bache
     public void gotoBache(View v) {
     	Intent intent = new Intent(this, BacheActivity.class);
+    	startActivity(intent);
+    }
+    
+    // Intent para la clase de Luminaria
+    public void gotoLuminaria(View v) {
+    	Intent intent = new Intent(this, LuminariaActivity.class);
+    	startActivity(intent);
+    }
+    
+    // Intent para la clase de Fuga
+    public void gotoFuga(View v) {
+    	Intent intent = new Intent(this, FugaActivity.class);
+    	startActivity(intent);
+    }
+    
+    // Intent para la clase de Arbol
+    public void gotoArbol(View v) {
+    	Intent intent = new Intent(this, ArbolActivity.class);
     	startActivity(intent);
     }
 

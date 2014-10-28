@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class BacheActivity extends Activity {
+public class ArbolActivity extends Activity {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.bache_activity);
+		setContentView(R.layout.arbol_activity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 	
@@ -20,4 +20,5 @@ public class BacheActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
 }

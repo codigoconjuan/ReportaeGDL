@@ -4,14 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class BacheActivity extends Activity {
+public class LuminariaActivity extends Activity {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.bache_activity);
+		setContentView(R.layout.luminaria_activity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
+	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

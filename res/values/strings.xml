@@ -4,5 +4,15 @@
     <string name="app_name">e-GDL</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="bache">Reportar Bache</string>
+    <string name="ubicacion">Conocer mi Ubicación</string>
+    <string name="comentario">Agregue un Comentario</string>
+    <color name="blanco">#fff</color>
+    <color name="gris">#dadada</color>
+    <string name="foto">Agregar Fotografías</string>
+    <string name="enviar">Enviar Reporte</string>
+    <string name="luminaria">Reportar Luminaria</string>
+    <string name="fuga">Reportar Fuga de Agua</string>
+    <string name="arbol">Reportar Arbol</string>
 
 </resources>

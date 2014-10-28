@@ -25,6 +25,15 @@
         
         <activity
             android:name=".BacheActivity" />
+        
+        <activity
+            android:name=".LuminariaActivity" />
+        
+        <activity
+            android:name=".FugaActivity" />
+        
+        <activity
+            android:name=".ArbolActivity" />
     </application>
 
 </manifest>
