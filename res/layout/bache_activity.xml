@@ -19,7 +19,9 @@
 	    <Button
 	        android:id="@+id/button1"
 	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="40dp"
+	        android:background="@drawable/botones"
+	        android:textColor="@drawable/btntxt"
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
 	        android:layout_marginTop="10dp"
@@ -28,13 +30,22 @@
 	        android:textColorLink="@color/blanco" />
 
 	    <Button
-	        android:id="@+id/button2"
+	        android:id="@+id/fotoBoton"
 	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="40dp"
+	        android:background="@drawable/botones"
+	        android:textColor="@drawable/btntxt"
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
 	        android:layout_marginTop="10dp"
 	        android:text="@string/foto" />
+
+	    <ImageView
+	        android:id="@+id/imageView1"
+	        android:layout_width="fill_parent"
+	        android:contentDescription="@string/foto"
+	        android:layout_height="100dp"
+	        android:src="@drawable/ic_action_camara" />
 
 	    <TextView
 	        android:id="@+id/textView2"
@@ -43,7 +54,8 @@
 	        android:textColor="@color/blanco"
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
-	        android:layout_marginTop="10dp"
+		        android:layout_marginTop="3dp"
+		         android:gravity="center"
 	        android:textSize="18sp"
 	        android:text="@string/comentario"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -52,9 +64,10 @@
 	        android:id="@+id/editText1"
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
+	        android:minHeight="90dp"
 	        android:padding="10dp"
+	        android:layout_marginTop="5dp"
 	        android:background="@color/blanco"
-	        android:layout_marginTop="10dp"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:inputType="textMultiLine" android:focusable="true">
@@ -64,10 +77,25 @@
 	    <Button
 	        android:id="@+id/button3"
 	        android:layout_width="fill_parent"
+	        android:layout_height="40dp"
+	        android:background="@drawable/botones"
+	        android:textColor="@drawable/btntxt"
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
 	        android:layout_marginTop="10dp"
-	        android:layout_height="wrap_content"
 	        android:text="@string/enviar" />
+	    
+	    <Button
+	        android:id="@+id/btn_guardar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="40dp"
+	        android:textAllCaps="true"
+	        android:textColor="@color/blanco"
+	        android:textStyle="bold"
+	        android:background="@drawable/botonrosa"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginTop="10dp"
+	        android:text="@string/guardar" />
 
 </LinearLayout>

@@ -1,83 +1,99 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_weight="1"
-    android:background="#536b83"
-    android:orientation="vertical" >
+    android:background="#536b83" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
         <ImageView
-            android:contentDescription="@string/app_name"
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/logo" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/textView1"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:textColor="@color/blanco"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/mtop"
+            android:text="@string/reportar" />
 
-        <ImageButton
-            android:id="@+id/ImageButton04"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:contentDescription="@string/app_name"
-            android:layout_margin="5dp"
-            android:background="#00000000"
-            android:cropToPadding="false"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_arboles" 
-            android:onClick="gotoArbol"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
 
-        <ImageButton
-            android:contentDescription="@string/app_name"
-            android:id="@+id/ImageButton03"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_margin="5dp"
-            android:adjustViewBounds="true"
-            android:background="#00000000"
-            android:cropToPadding="false"
-            android:scaleType="fitXY"
-            android:src="@drawable/btn_baches"
-            android:onClick="gotoBache"
-             />
+            <ImageButton
+                android:id="@+id/ImageButton04"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_margin="5dp"
+                android:background="#00000000"
+                android:contentDescription="@string/app_name"
+                android:cropToPadding="false"
+                android:onClick="gotoArbol"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_arboles" />
+
+            <ImageButton
+                android:id="@+id/ImageButton03"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_margin="5dp"
+                android:adjustViewBounds="true"
+                android:background="#00000000"
+                android:contentDescription="@string/app_name"
+                android:cropToPadding="false"
+                android:onClick="gotoBache"
+                android:scaleType="fitXY"
+                android:src="@drawable/btn_baches" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/ImageButton01"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_margin="5dp"
+                android:background="#00000000"
+                android:contentDescription="@string/app_name"
+                android:cropToPadding="false"
+                android:onClick="gotoFuga"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_fugas" />
+
+            <ImageButton
+                android:id="@+id/ImageButton02"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_margin="5dp"
+                android:adjustViewBounds="true"
+                android:background="#00000000"
+                android:contentDescription="@string/app_name"
+                android:cropToPadding="false"
+                android:onClick="gotoLuminaria"
+                android:scaleType="fitXY"
+                android:src="@drawable/btn_luminarias" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal" >
-
-        <ImageButton
-            android:contentDescription="@string/app_name"
-            android:id="@+id/ImageButton01"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_margin="5dp"
-            android:background="#00000000"
-            android:cropToPadding="false"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_fugas" 
-            android:onClick="gotoFuga"/>
-
-        <ImageButton
-            android:contentDescription="@string/app_name"
-            android:id="@+id/ImageButton02"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_margin="5dp"
-            android:adjustViewBounds="true"
-            android:background="#00000000"
-            android:cropToPadding="false"
-            android:scaleType="fitXY"
-            android:src="@drawable/btn_luminarias"
-            android:onClick="gotoLuminaria" />
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
