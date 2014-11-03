@@ -7,6 +7,23 @@
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
+    
+    <permission 
+        android:name="com.example.gmapsapp.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature"/>
+    
+    <uses-permission android:name="com.example.gmapsapp.permission.MAPS_RECEIVE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	<uses-permission 
+	    android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+	<uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +41,14 @@
             </intent-filter>
         </activity>
         
+        <meta-data
+		    android:name="com.google.android.gms.version"
+		    android:value="@integer/google_play_services_version" />
+        
+        <meta-data 
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDw3vGGy35WOL5Dn22fDWrTcq9kn5NsoY4"/>
+        
         <activity
             android:name=".BacheActivity"
              android:windowSoftInputMode="stateHidden" />
@@ -39,6 +64,9 @@
         <activity
             android:name=".ArbolActivity" 
             android:windowSoftInputMode="stateHidden"/>
+        
+
+        
     </application>
 
 </manifest>
