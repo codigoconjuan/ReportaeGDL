@@ -16,5 +16,6 @@
     <string name="arbol">Reportar Arbol</string>
     <string name="guardar">Guardar Reporte</string>
     <string name="reportar">Selecciona que deseas reportar</string>
+     <string name="uploaded">Se ha subido correctament</string>
 
 </resources>
