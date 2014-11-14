@@ -1,11 +1,14 @@
 package com.reporta.reportaegdl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -33,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -42,6 +46,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -60,13 +66,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ArbolActivity extends FragmentActivity implements 
+@SuppressLint("SimpleDateFormat") public class ArbolActivity extends FragmentActivity implements 
  GooglePlayServicesClient.ConnectionCallbacks,
  GooglePlayServicesClient.OnConnectionFailedListener
 {
-
 	//variables tomar foto
 	ImageView ivImage;
+	
+	
+
 	
 	
 	// variables mapas
@@ -86,18 +94,19 @@ public class ArbolActivity extends FragmentActivity implements
 	private static final float DEFAULTZOOMTOUCH = 16;
 	private static final int REQUEST_CAMERA = 0;
 	private static final int SELECT_FILE = 0;
-	
+	private String urlFile = "";
 	// 
     TextView messageText;
     Button uploadButton;
     int serverResponseCode = 0;
     ProgressDialog dialog = null;
-        
     String upLoadServerUri = null;
+    
+    private Bitmap bm;
      
-    /**********  File Path *************/
-    final String uploadFilePath = "/storage/sdcard0/DCIM/100LGDSC/";
-    final String uploadFileName = "4Nov3.jpg";
+ 
+    
+    
 	
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +117,18 @@ public class ArbolActivity extends FragmentActivity implements
 				
 				setContentView(R.layout.arbol_activity);
 				
+				String value = "";
+				Bundle extras = getIntent().getExtras();
+				if(extras !=null) {
+				    value = extras.getString("titulo");
+				}
+				final TextView mTextView = (TextView) findViewById(R.id.textView1);
+				mTextView.setText(value);
 				
 				//imagenes
 				uploadButton = (Button)findViewById(R.id.enviarArbol);
 			    messageText  = (TextView)findViewById(R.id.messageText);
-			    messageText.setText("Uploading file path :- '/storage/sdcard/DCIM/100LGDSC"+uploadFileName+"'");
+			    messageText.setText("Uploading file path :- '"+urlFile+"'");
 			    
 			     /************* Php script path ****************/
 		        upLoadServerUri = "http://sistemasmexicanos.com/android/guardar.php";
@@ -120,9 +136,7 @@ public class ArbolActivity extends FragmentActivity implements
 		        uploadButton.setOnClickListener(new OnClickListener() {            
 		            @Override
 		            public void onClick(View v) {
-		                 
 		                dialog = ProgressDialog.show(ArbolActivity.this, "", "Uploading file...", true);
-		                 
 		                new Thread(new Runnable() {
 		                        public void run() {
 		                             runOnUiThread(new Runnable() {
@@ -131,7 +145,8 @@ public class ArbolActivity extends FragmentActivity implements
 		                                    }
 		                                });                      
 		                           
-		                             uploadFile(uploadFilePath + "" + uploadFileName);
+		                             //uploadFile(uploadFilePath + "" + uploadFileName);
+		                             uploadFile(urlFile);
 		                                                      
 		                        }
 		                      }).start();        
@@ -329,23 +344,38 @@ public class ArbolActivity extends FragmentActivity implements
 					}
 				}
 				try {
-					Bitmap bm;
+					//Bitmap bm;
 					BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-
-					bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
-							btmapOptions);
-
-				   bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
+					bm = BitmapFactory.decodeFile(f.getAbsolutePath(), btmapOptions);
+					
+										
+				    bm = Bitmap.createScaledBitmap(bm, 700, 700, true);
 					ivImage.setImageBitmap(bm);
 
-					String path = android.os.Environment
-							.getExternalStorageDirectory()
-							+ File.separator
-							+ "Phoenix" + File.separator + "default";
+				    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+				    String imageFileName = "JPEG_" + timeStamp + "_";
+				    File storageDir = Environment.getExternalStoragePublicDirectory(
+				            Environment.DIRECTORY_PICTURES);
+				    File image = File.createTempFile(
+				        imageFileName,  /* prefix */
+				        ".jpg",         /* suffix */
+				        storageDir      /* directory */
+				    );
+					
+		
 					f.delete();
+					
 					OutputStream fOut = null;
-					File file = new File(path, String.valueOf(System
-							.currentTimeMillis()) + ".jpg");
+					
+					File file = new File(image.getAbsolutePath());
+					
+					
+					//** URL DEL ARCHIVO ***/
+					urlFile = image.getPath();
+					Log.v("La url es", urlFile);
+					
+					
+					
 					try {
 						fOut = new FileOutputStream(file);
 						bm.compress(Bitmap.CompressFormat.JPEG, 1, fOut);
@@ -466,8 +496,7 @@ public class ArbolActivity extends FragmentActivity implements
 			public void onClick(DialogInterface dialog, int item) {
 				if (items[item].equals("Tomar una Fotografia")) {
 					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					File f = new File(android.os.Environment
-							.getExternalStorageDirectory(), "temp.jpg");
+					File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
 					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 					startActivityForResult(intent, REQUEST_CAMERA);
 				} else if (items[item].equals("Elegir de la Librería")) {
@@ -486,8 +515,7 @@ public class ArbolActivity extends FragmentActivity implements
 		builder.show();
 	}
 
-	
-	
+
     public int uploadFile(String sourceFileUri) {
         
         
@@ -508,13 +536,16 @@ public class ArbolActivity extends FragmentActivity implements
              dialog.dismiss(); 
               
              Log.e("uploadFile", "Source File not exist :"
-                                 +uploadFilePath + "" + uploadFileName);
+                                 +urlFile);
               
              runOnUiThread(new Runnable() {
+            	 
                  public void run() {
                      messageText.setText("Source File not exist :"
-                             +uploadFilePath + "" + uploadFileName);
+                             +urlFile);
+                             
                  }
+                 
              }); 
               
              return 0;
@@ -522,12 +553,22 @@ public class ArbolActivity extends FragmentActivity implements
         }
         else
         {
-             try { 
-                  
-                   // open a URL connection to the Servlet
-                 FileInputStream fileInputStream = new FileInputStream(sourceFile);
+        	try { 
+                
+                // open a URL connection to the Servlet
+              //FileInputStream fileInputStream = new FileInputStream(sourceFile);
+         //BitmapDrawable map = (BitmapDrawable)ivImage.getDrawable();
+       //  Bitmap bitmap = map.getBitmap();
+         ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			   bm.compress(Bitmap.CompressFormat.JPEG, 100, stream); // convert Bitmap to ByteArrayOutputStream
+			   InputStream fileInputStream = new ByteArrayInputStream(stream.toByteArray());
+   
+   
                  URL url = new URL(upLoadServerUri);
-                  
+                 
+                 
+                 
+                 
                  // Open a HTTP  connection to  the URL
                  conn = (HttpURLConnection) url.openConnection(); 
                  conn.setDoInput(true); // Allow Inputs
@@ -582,7 +623,7 @@ public class ArbolActivity extends FragmentActivity implements
                                
                               String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
                                             +" http://www.androidexample.com/media/uploads/"
-                                            +uploadFileName;
+                                            +urlFile;
                                
                               messageText.setText(msg);
                               Toast.makeText(ArbolActivity.this, "File Upload Complete.", 
@@ -630,5 +671,6 @@ public class ArbolActivity extends FragmentActivity implements
              
          } // End else block 
        } 
+
 	
 }

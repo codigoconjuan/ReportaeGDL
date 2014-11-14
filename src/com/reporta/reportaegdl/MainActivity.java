@@ -45,6 +45,7 @@ public class MainActivity extends Activity {
     // Intent para la clase de Arbol
     public void gotoArbol(View v) {
     	Intent intent = new Intent(this, ArbolActivity.class);
+    	intent.putExtra("titulo","Reportar un Árbol");
     	startActivity(intent);
     }
 
