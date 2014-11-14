@@ -117,6 +117,9 @@ import android.widget.Toast;
 				
 				setContentView(R.layout.arbol_activity);
 				
+				
+				/** DINAMICAMENTE AGARRAR EL TITULO **/
+				
 				String value = "";
 				Bundle extras = getIntent().getExtras();
 				if(extras !=null) {
@@ -124,6 +127,9 @@ import android.widget.Toast;
 				}
 				final TextView mTextView = (TextView) findViewById(R.id.textView1);
 				mTextView.setText(value);
+				
+				
+				
 				
 				//imagenes
 				uploadButton = (Button)findViewById(R.id.enviarArbol);

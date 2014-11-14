@@ -26,19 +26,22 @@ public class MainActivity extends Activity {
     
     // Intent para la clase de Bache
     public void gotoBache(View v) {
-    	Intent intent = new Intent(this, BacheActivity.class);
+    	Intent intent = new Intent(this, ArbolActivity.class);
+    	intent.putExtra("titulo","Reportar un Bache");
     	startActivity(intent);
     }
     
     // Intent para la clase de Luminaria
     public void gotoLuminaria(View v) {
-    	Intent intent = new Intent(this, LuminariaActivity.class);
+    	Intent intent = new Intent(this, ArbolActivity.class);
+    	intent.putExtra("titulo","Reportar una Luminaria");
     	startActivity(intent);
     }
     
     // Intent para la clase de Fuga
     public void gotoFuga(View v) {
-    	Intent intent = new Intent(this, FugaActivity.class);
+    	Intent intent = new Intent(this, ArbolActivity.class);
+    	intent.putExtra("titulo","Reportar una Fuga de Agua");
     	startActivity(intent);
     }
     
