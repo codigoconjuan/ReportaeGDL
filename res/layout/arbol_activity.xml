@@ -86,7 +86,7 @@
 		        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 		    <EditText
-		        android:id="@+id/editText1"
+		        android:id="@+id/comentario"
 		        android:layout_marginLeft="10dp"
 		        android:layout_marginRight="10dp"
 		        android:padding="2dp"
@@ -98,6 +98,20 @@
 		        android:inputType="textMultiLine" >
 	
 		    </EditText>
+		    
+			<TextView
+	      	  android:id="@+id/exp_hidden_id"
+	      	  android:layout_width="fill_parent"
+	          android:layout_height="wrap_content"
+	          android:visibility="gone"/>
+	
+			<TextView
+	      	  android:id="@+id/lat_hidden"
+	      	  android:layout_width="fill_parent"
+	          android:layout_height="wrap_content"
+	          android:visibility="gone"
+	         />
+
 	
 		    <Button
 		        android:id="@+id/enviarArbol"

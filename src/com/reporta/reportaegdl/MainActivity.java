@@ -1,7 +1,12 @@
 package com.reporta.reportaegdl;
 
+import com.reporta.reportaegdl.db.ReportesDBOpenHelper;
+import com.reporta.reportaegdl.db.ReportesDataSource;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,11 +14,20 @@ import android.view.View;
 
 
 public class MainActivity extends Activity {
+	
+	
+	// crear la conexion a la BD
+	ReportesDataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        
+        //instanciar BD
+        datasource = new ReportesDataSource(this);
+        
     }
 
 
@@ -28,6 +42,7 @@ public class MainActivity extends Activity {
     public void gotoBache(View v) {
     	Intent intent = new Intent(this, ArbolActivity.class);
     	intent.putExtra("titulo","Reportar un Bache");
+    	intent.putExtra("id", "2");
     	startActivity(intent);
     }
     
@@ -35,6 +50,7 @@ public class MainActivity extends Activity {
     public void gotoLuminaria(View v) {
     	Intent intent = new Intent(this, ArbolActivity.class);
     	intent.putExtra("titulo","Reportar una Luminaria");
+    	intent.putExtra("id", "3");
     	startActivity(intent);
     }
     
@@ -42,6 +58,7 @@ public class MainActivity extends Activity {
     public void gotoFuga(View v) {
     	Intent intent = new Intent(this, ArbolActivity.class);
     	intent.putExtra("titulo","Reportar una Fuga de Agua");
+    	intent.putExtra("id", "4");
     	startActivity(intent);
     }
     
@@ -49,6 +66,7 @@ public class MainActivity extends Activity {
     public void gotoArbol(View v) {
     	Intent intent = new Intent(this, ArbolActivity.class);
     	intent.putExtra("titulo","Reportar un Árbol");
+    	intent.putExtra("id", "1");
     	startActivity(intent);
     }
 
@@ -62,5 +80,18 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    protected void onResume() {
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    	datasource.open();
+    }
+    
+    @Override
+    protected void onPause() {
+    	super.onPause();
+    	datasource.close();
     }
 }

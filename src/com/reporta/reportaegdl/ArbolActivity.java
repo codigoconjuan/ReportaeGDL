@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,8 +13,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -46,12 +51,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -62,6 +66,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,13 +78,9 @@ import android.widget.Toast;
 	//variables tomar foto
 	ImageView ivImage;
 	
-	
-
-	
-	
 	// variables mapas
 	
-	
+
 	private static final int GPS_ERRORDIALOG_REQUEST = 9001;
 	private ScrollView mScrollView;
 	private GoogleMap mMap;  
@@ -95,6 +96,7 @@ import android.widget.Toast;
 	private static final int REQUEST_CAMERA = 0;
 	private static final int SELECT_FILE = 0;
 	private String urlFile = "";
+	private String nameFile = "";
 	// 
     TextView messageText;
     Button uploadButton;
@@ -104,11 +106,19 @@ import android.widget.Toast;
     
     private Bitmap bm;
      
+    // ENVIAR A FORMULARIO
+    private ProgressDialog pDialog;
+    JSONParser jsonParser = new JSONParser();
+    EditText comentario;
+    TextView idCampo;
+    TextView  coorLat;
  
+    // url to create new product
+    private static String url_create_product = "http://sistemasmexicanos.com/android/crear_reporte.php";
+ 
+    // JSON Node names
+    private static final String TAG_SUCCESS = "success";
     
-    
-	
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -120,15 +130,18 @@ import android.widget.Toast;
 				
 				/** DINAMICAMENTE AGARRAR EL TITULO **/
 				
-				String value = "";
+				String titulo = "";
+				String id = "";
 				Bundle extras = getIntent().getExtras();
 				if(extras !=null) {
-				    value = extras.getString("titulo");
+				    titulo = extras.getString("titulo");
+				    id = extras.getString("id");
 				}
 				final TextView mTextView = (TextView) findViewById(R.id.textView1);
-				mTextView.setText(value);
-				
-				
+				final TextView idCampo = (TextView) findViewById(R.id.exp_hidden_id);
+				mTextView.setText(titulo);
+				idCampo.setText(id);
+
 				
 				
 				//imagenes
@@ -138,26 +151,34 @@ import android.widget.Toast;
 			    
 			     /************* Php script path ****************/
 		        upLoadServerUri = "http://sistemasmexicanos.com/android/guardar.php";
-		         
-		        uploadButton.setOnClickListener(new OnClickListener() {            
-		            @Override
-		            public void onClick(View v) {
-		                dialog = ProgressDialog.show(ArbolActivity.this, "", "Uploading file...", true);
-		                new Thread(new Runnable() {
-		                        public void run() {
-		                             runOnUiThread(new Runnable() {
-		                                    public void run() {
-		                                        messageText.setText("uploading started.....");
-		                                    }
-		                                });                      
-		                           
-		                             //uploadFile(uploadFilePath + "" + uploadFileName);
-		                             uploadFile(urlFile);
-		                                                      
-		                        }
-		                      }).start();        
-		                }
-		            });
+		        
+			        uploadButton.setOnClickListener(new OnClickListener() {            
+			            @Override
+			            public void onClick(View v) {
+			            	
+			            	//new crearReporte().execute();
+			            	
+			                dialog = ProgressDialog.show(ArbolActivity.this, "", "Uploading file...", true);
+			                new Thread(new Runnable() {
+			                        public void run() {
+			                        	
+
+			                             runOnUiThread(new Runnable() {
+			                                    public void run() {
+			                                        messageText.setText("uploading started.....");
+			                                    }
+			                                });                      
+			                           
+			                             //uploadFile(uploadFilePath + "" + uploadFileName);
+			                             
+			                             uploadFile(urlFile);
+			                                                      
+			                        }
+			                      }).start();    		                
+			                }
+			            
+			            	
+			            });
 
 			        
 			        // fin imagenes
@@ -195,6 +216,11 @@ import android.widget.Toast;
 							
 							Address add = list.get(0);
 							ArbolActivity.this.setMarker(add.getLocality(), add.getCountryName(), ll.latitude, ll.longitude );
+							
+							// STRING DE COORDENADAS
+							String cstring = ll.toString();
+							TextView lt_hdn = (TextView) findViewById(R.id.lat_hidden);
+							lt_hdn.setText(cstring);
 						}
 					});
 					
@@ -203,6 +229,11 @@ import android.widget.Toast;
 						public boolean onMarkerClick(Marker marker) {
 							String msg = marker.getTitle() + " (" +marker.getPosition().latitude + "," + marker.getPosition().longitude + ")";
 							Toast.makeText(ArbolActivity.this, msg, Toast.LENGTH_LONG).show();
+							
+							TextView lt_hdn = (TextView) findViewById(R.id.lat_hidden);
+							lt_hdn.setText(msg);
+							
+							
  							return false;
 						}
 					});
@@ -212,7 +243,6 @@ import android.widget.Toast;
 						@Override
 						public void onMarkerDragStart(Marker arg0) {
 							// TODO Auto-generated method stub
-							
 						}
 						
 						@Override
@@ -233,6 +263,12 @@ import android.widget.Toast;
 							marker.setTitle(add.getLocality());
 							marker.setSnippet(add.getCountryName());
 							marker.showInfoWindow();
+							
+
+							// STRING DE COORDENADAS
+							String cstring = ll.toString();
+							TextView lt_hdn = (TextView) findViewById(R.id.lat_hidden);
+							lt_hdn.setText(cstring);
 							
 						}
 							
@@ -267,6 +303,7 @@ import android.widget.Toast;
 			geo.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					gotoCurrentLocation();
+				
 				}
 			});
 			
@@ -277,6 +314,14 @@ import android.widget.Toast;
 					selectImage();
 				}
 			});
+			
+			
+			// Campos de texto
+			
+	        // Edit Text
+	        comentario = (EditText) findViewById(R.id.comentario);
+	        idCampo = (TextView) findViewById(R.id.exp_hidden_id);
+	        coorLat = (TextView) findViewById(R.id.lat_hidden);
 
 	}
 	
@@ -378,6 +423,7 @@ import android.widget.Toast;
 					
 					//** URL DEL ARCHIVO ***/
 					urlFile = image.getPath();
+					nameFile = image.getName();
 					Log.v("La url es", urlFile);
 					
 					
@@ -465,6 +511,12 @@ import android.widget.Toast;
 			.position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
 			.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker));
 
+			LatLng coordenadas = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+			
+			String cstring = coordenadas.toString();
+			
+			TextView lt_hdn = (TextView) findViewById(R.id.lat_hidden);
+			lt_hdn.setText(cstring);
 			
 			marker = mMap.addMarker(options);
 		}
@@ -569,10 +621,7 @@ import android.widget.Toast;
 			   bm.compress(Bitmap.CompressFormat.JPEG, 100, stream); // convert Bitmap to ByteArrayOutputStream
 			   InputStream fileInputStream = new ByteArrayInputStream(stream.toByteArray());
    
-   
                  URL url = new URL(upLoadServerUri);
-                 
-                 
                  
                  
                  // Open a HTTP  connection to  the URL
@@ -585,6 +634,11 @@ import android.widget.Toast;
                  conn.setRequestProperty("ENCTYPE", "multipart/form-data");
                  conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                  conn.setRequestProperty("uploaded_file", fileName); 
+                 conn.setRequestProperty("comentarioReporte",comentario.getText().toString());
+                 conn.setRequestProperty("idReporte",idCampo.getText().toString());
+                 conn.setRequestProperty("coordenadas",coorLat.getText().toString());
+
+                 
                   
                  dos = new DataOutputStream(conn.getOutputStream());
         
@@ -608,7 +662,6 @@ import android.widget.Toast;
                    bytesAvailable = fileInputStream.available();
                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
-                    
                   }
         
                  // send multipart form data necesssary after file data...
@@ -626,6 +679,8 @@ import android.widget.Toast;
                       
                      runOnUiThread(new Runnable() {
                           public void run() {
+                        	  
+                        	  new crearReporte().execute();
                                
                               String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
                                             +" http://www.androidexample.com/media/uploads/"
@@ -678,5 +733,84 @@ import android.widget.Toast;
          } // End else block 
        } 
 
+    
+	// JSON ENVIAR
+	    
+    /**
+     * Background Async Task to Create new product
+     * */
+    class crearReporte extends AsyncTask<String, String, String> {
+ 
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(ArbolActivity.this);
+            pDialog.setMessage("Enviando Reporte");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+ 
+        /**
+         * Creating product
+         * */
+        protected String doInBackground(String... args) {
+            String cmtReporte = comentario.getText().toString();
+            String idReporte = idCampo.getText().toString();
+            String coordenadas = coorLat.getText().toString();
+ 
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("comentarioReporte", cmtReporte));
+            params.add(new BasicNameValuePair("idReporte", idReporte));
+            params.add(new BasicNameValuePair("coordenadas", coordenadas));
+            params.add(new BasicNameValuePair("direccionFoto", nameFile));
+ 
+            // getting JSON Object
+            // Note that create product url accepts POST method
+            JSONObject json = jsonParser.makeHttpRequest(url_create_product,
+                    "POST", params);
+            
+            String parametros = params.toString();
+            
+            Log.w("myApp", parametros);
+ 
+            // check log cat fro response
+            Log.d("Create Response", json.toString());
+ 
+            // check for success tag
+            try {
+                int success = json.getInt(TAG_SUCCESS);
+ 
+                if (success == 1) {
+                    // successfully created product
+                    //Intent i = new Intent(getApplicationContext(), AllProductsActivity.class);
+                    //startActivity(i);
+                	
+ 
+                    // closing this screen
+                    finish();
+                } else {
+                    // failed to create product
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+ 
+            return null;
+        }
+ 
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once done
+            pDialog.dismiss();
+        }
+ 
+    }
 	
 }
