@@ -3,7 +3,7 @@ package com.reporta.reportaegdl.model;
 import java.text.NumberFormat;
 
 public class Reporte {
-	private int id;
+	private long id;
 	private String titulo;
 	private String mensaje;
 	private double coordenadas;
@@ -17,10 +17,10 @@ public class Reporte {
 		this.titulo = titulo;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getTitle() {

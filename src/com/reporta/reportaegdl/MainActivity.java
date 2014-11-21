@@ -1,20 +1,26 @@
 package com.reporta.reportaegdl;
 
+import java.util.List;
+
 import com.reporta.reportaegdl.db.ReportesDBOpenHelper;
 import com.reporta.reportaegdl.db.ReportesDataSource;
+import com.reporta.reportaegdl.model.Reporte;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
 
-public class MainActivity extends Activity {
-	
+public class MainActivity extends ListActivity {
+	private static final String LOGTAG = "REPORTAGDL";
 	
 	// crear la conexion a la BD
 	ReportesDataSource datasource;
@@ -22,16 +28,33 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+      //  setContentView(R.layout.activity_main);
         
         
         //instanciar BD
         datasource = new ReportesDataSource(this);
+        datasource.open(); 
+        
+        List<Reporte> reportes = datasource.findAll();
+        
+        if (reportes.size()  == 0) {
+        	createData();
+        	reportes = datasource.findAll();
+        }
+        
+        ArrayAdapter<Reporte> adapter = new ArrayAdapter<Reporte>(this,android.R.layout.simple_list_item_1, reportes);
+		setListAdapter(adapter);
+        
+        
+
         
     }
 
 
-    @Override
+
+
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -94,4 +117,37 @@ public class MainActivity extends Activity {
     	super.onPause();
     	datasource.close();
     }
+    
+    
+    // data prueba
+    private void createData() {
+    	Reporte reporte = new Reporte();
+    	reporte.setTitle("Reporte 1");
+    	reporte.setCoordenadas(103.2001);
+    	reporte.setTipo("Árbol");
+    	reporte.setDescription("Arbol a punto de caer");
+    	reporte.setImage("una_imagen");
+    	reporte = datasource.create(reporte);
+    	Log.i(LOGTAG, "Inserción correcta con el id " + reporte.getId());
+    	
+    	reporte = new Reporte();
+    	reporte.setTitle("Reporte 2");
+    	reporte.setCoordenadas(103.2001);
+    	reporte.setTipo("Bache");
+    	reporte.setDescription("Bache abierto");
+    	reporte.setImage("dos_imagen");
+    	reporte = datasource.create(reporte);
+    	Log.i(LOGTAG, "Inserción correcta con el id " + reporte.getId());
+    	
+    	reporte = new Reporte();
+    	reporte.setTitle("Reporte 2");
+    	reporte.setCoordenadas(103.2001);
+    	reporte.setTipo("Luminaria");
+    	reporte.setDescription("lUMINARIA APAGADA");
+    	reporte.setImage("tres_imagen");
+    	reporte = datasource.create(reporte);
+    	Log.i(LOGTAG, "Inserción correcta con el id " + reporte.getId());
+    }
+    
+    
 }
