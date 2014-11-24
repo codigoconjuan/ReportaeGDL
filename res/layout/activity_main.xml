@@ -94,6 +94,21 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/btn_luminarias" />
         </LinearLayout>
+        
+		    <Button
+		        android:id="@+id/btn_guardar"
+		        android:layout_width="fill_parent"
+		        android:layout_height="40dp"
+		        android:textAllCaps="true"
+		        android:textColor="@color/blanco"
+		        android:textStyle="bold"
+		        android:background="@drawable/botonrosa"
+		        android:onClick="gotoReportes"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:layout_marginBottom="10dp"
+		        android:layout_marginTop="10dp"
+		        android:text="@string/guardados" />
     </LinearLayout>
 
 </ScrollView>

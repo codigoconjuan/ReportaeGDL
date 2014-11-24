@@ -55,16 +55,9 @@
             android:value="AIzaSyDw3vGGy35WOL5Dn22fDWrTcq9kn5NsoY4"/>
         
         <activity
-            android:name=".BacheActivity"
+            android:name=".GuardadosActivity"
              android:windowSoftInputMode="stateHidden" />
-        
-        <activity
-            android:name=".LuminariaActivity" 
-            android:windowSoftInputMode="stateHidden"/>
-        
-        <activity
-            android:name=".FugaActivity"
-            android:windowSoftInputMode="stateHidden" />
+
         
         <activity
             android:name=".ArbolActivity" 

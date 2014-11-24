@@ -17,5 +17,8 @@
     <string name="guardar">Guardar Reporte</string>
     <string name="reportar">Selecciona que deseas reportar</string>
      <string name="uploaded">Se ha subido correctament</string>
+     <string name="guardados">Reportes guardados</string>
+     
+    <string name="misreportes">Reportes Guardados</string>
 
 </resources>

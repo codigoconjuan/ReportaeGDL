@@ -19,7 +19,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends Activity {
 	private static final String LOGTAG = "REPORTAGDL";
 	
 	// crear la conexion a la BD
@@ -28,9 +28,11 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  setContentView(R.layout.activity_main);
         
         
+        setContentView(R.layout.activity_main);
+        
+        /*
         //instanciar BD
         datasource = new ReportesDataSource(this);
         datasource.open(); 
@@ -38,15 +40,22 @@ public class MainActivity extends ListActivity {
         List<Reporte> reportes = datasource.findAll();
         
         if (reportes.size()  == 0) {
+        	
+        	//llama a la funciónd e abajo.
         	createData();
         	reportes = datasource.findAll();
         }
         
+        // la ponemos un arrayList y creamos la vista
         ArrayAdapter<Reporte> adapter = new ArrayAdapter<Reporte>(this,android.R.layout.simple_list_item_1, reportes);
 		setListAdapter(adapter);
         
+        */
+         
         
 
+        //instanciar BD
+         datasource = new ReportesDataSource(this);
         
     }
 
@@ -93,6 +102,12 @@ public class MainActivity extends ListActivity {
     	startActivity(intent);
     }
 
+    // Intent para los reportes
+    public void gotoReportes(View v) {
+    	Intent intent = new Intent(this, GuardadosActivity.class);
+    	startActivity(intent);
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
